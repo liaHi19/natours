@@ -1,5 +1,6 @@
 const fs = require('fs');
 const express = require('express');
+const { log } = require('console');
 
 const app = express();
 app.use(express.json());
@@ -28,7 +29,6 @@ app.get('/api/v1/tours/:id', (req, res) => {
 app.post('/api/v1/tours', (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
   const newTour = { id: newId, ...req.body };
-  console.log(newTour);
   tours.push(newTour);
 
   fs.writeFile(
@@ -39,6 +39,24 @@ app.post('/api/v1/tours', (req, res) => {
     }
   );
 });
+
+app.delete('/api/v1/tours/:id', (req, res) => {
+  const id = +req.params.id;
+  const tour = tours.find((tour) => tour.id === id);
+
+  if (!tour) {
+    return res.status(404).json({ status: 'fail', message: 'Incorrect ID' });
+  }
+  const newTours = tours.filter((el) => el.id !== id);
+  fs.writeFile(
+    `${__dirname}/dev-data/data/tours-simple.json`,
+    JSON.stringify(newTours),
+    (err) => {
+      res.status(204).json({ status: 'success', data: null });
+    }
+  );
+});
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Port is running on port ${PORT}`);
