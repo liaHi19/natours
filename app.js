@@ -4,14 +4,28 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 
+app.use((req, res, next) => {
+  console.log('hello from middleware');
+  next();
+});
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
+
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
 const getTours = (req, res) => {
-  res
-    .status(200)
-    .json({ status: 'success', results: tours.length, data: { tours } });
+  const { requestTime } = req;
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    requestTime,
+    data: { tours },
+  });
 };
 
 const createTour = (req, res) => {
