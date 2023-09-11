@@ -58,6 +58,12 @@ const getTour = (req, res) => {
   res.status(200).json({ status: 'success', data: { tour } });
 };
 
+const updateTour = (req, res) => {
+  res
+    .status(500)
+    .json({ status: 'error', message: 'This route is not defined' });
+};
+
 const deleteTour = (req, res) => {
   const id = +req.params.id;
   const tour = tours.find((tour) => tour.id === id);
@@ -75,9 +81,50 @@ const deleteTour = (req, res) => {
   );
 };
 
+const getAllUsers = (req, res) => {
+  res
+    .status(500)
+    .json({ status: 'error', message: 'This route is not defined' });
+};
+
+const createUser = (req, res) => {
+  res
+    .status(500)
+    .json({ status: 'error', message: 'This route is not defined' });
+};
+
+const getUser = (req, res) => {
+  res
+    .status(500)
+    .json({ status: 'error', message: 'This route is not defined' });
+};
+
+const updateUser = (req, res) => {
+  res
+    .status(500)
+    .json({ status: 'error', message: 'This route is not defined' });
+};
+
+const deleteUser = (req, res) => {
+  res
+    .status(500)
+    .json({ status: 'error', message: 'This route is not defined' });
+};
+
 // Request routes
 app.route('/api/v1/tours').get(getTours).post(createTour);
-app.route('/api/v1/tours/:id').get(getTour).delete(deleteTour);
+app
+  .route('/api/v1/tours/:id')
+  .get(getTour)
+  .patch(updateTour)
+  .delete(deleteTour);
+
+app.route('/api/v1/users').get(getAllUsers).post(createUser);
+app
+  .route('/api/v1/users/:id')
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
 
 // Port
 const PORT = 3000;
