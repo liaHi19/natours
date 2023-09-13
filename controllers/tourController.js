@@ -4,7 +4,17 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
-// Request handles
+exports.checkID = (req, res, next, val) => {
+  console.log(`This is id ${val}`);
+  const id = +req.params.id;
+  const tour = tours.find((tour) => tour.id === id);
+
+  if (!tour) {
+    return res.status(404).json({ status: 'fail', message: 'Incorrect ID' });
+  }
+  next();
+};
+
 exports.getTours = (req, res) => {
   const { requestTime } = req;
   res.status(200).json({
@@ -33,10 +43,6 @@ exports.getTour = (req, res) => {
   const id = +req.params.id;
   const tour = tours.find((tour) => tour.id === id);
 
-  if (!tour) {
-    return res.status(404).json({ status: 'fail', message: 'Incorrect ID' });
-  }
-
   res.status(200).json({ status: 'success', data: { tour } });
 };
 
@@ -48,11 +54,6 @@ exports.updateTour = (req, res) => {
 
 exports.deleteTour = (req, res) => {
   const id = +req.params.id;
-  const tour = tours.find((tour) => tour.id === id);
-
-  if (!tour) {
-    return res.status(404).json({ status: 'fail', message: 'Incorrect ID' });
-  }
   const newTours = tours.filter((el) => el.id !== id);
   fs.writeFile(
     `${__dirname}/dev-data/data/tours-simple.json`,
