@@ -15,6 +15,17 @@ exports.checkID = (req, res, next, val) => {
   next();
 };
 
+exports.checkBody = (req, res, next) => {
+  const { name, price } = req.body;
+
+  if (!name || !price) {
+    return res
+      .status(400)
+      .json({ status: 'fail', message: 'Field name or price is absent' });
+  }
+  next();
+};
+
 exports.getTours = (req, res) => {
   const { requestTime } = req;
   res.status(200).json({
