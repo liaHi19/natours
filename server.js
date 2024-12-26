@@ -13,6 +13,13 @@ mongoose
   .then(() => console.log('Database is connected'));
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Port is running on port ${PORT}`);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.log('Unhandler rejection 🔥 Shutting down!');
+  server.close(() => {
+    process.exit(1);
+  });
 });
